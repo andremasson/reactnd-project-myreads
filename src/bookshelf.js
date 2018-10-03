@@ -4,29 +4,38 @@ import PropTypes from 'prop-types'
 class BookShelf extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    books: PropTypes.array.isRequired
+    books: PropTypes.array,
+    onMoveShelf: PropTypes.func.isRequired
   };
 
   render() {
-    const { title, books } = this.props;
+    const { title, books, onMoveShelf } = this.props;
+    const actions = [
+      { value: 'move', label: 'Move to...', prop: 'disabled'},
+      { value: 'currentlyReading', label: 'Currently Reading', prop: ''},
+      { value: 'wantToRead', label: 'Want to Read', prop: ''},
+      { value: 'read', label: 'Read', prop: ''},
+      { value: 'none', label: 'None', prop: ''}
+    ];
 
     return (
       <div className='bookshelf'>
         <h2 className='bookshelf-title'>{title}</h2>
         <div className='bookshelf-books'>
           <ol className='books-grid'>
-            {books.map((book) => (
+            {books && books.map((book) => (
               <li key={book.id}>
                 <div className='book'>
                   <div className='book-top'>                    
                     <div className='book-cover' style={{ width: 128, height: 192, backgroundImage: `url(${book.imageLinks.thumbnail})` }} />
                     <div className='book-shelf-changer'>
-                      <select>
-                        <option value='move' disabled>Move to...</option>
-                        <option value='currentlyReading'>Currently Reading</option>
-                        <option value='wnatToRead'>Want to Read</option>
-                        <option value='read'>Read</option>
-                        <option value='none'>None</option>
+                      <select value={book.shelf} onChange={(e) => onMoveShelf(book, e)}>
+                        {actions.map((action) => (
+                          <option 
+                            key={action.value}
+                            value={action.value}
+                          >{action.label}</option>
+                        ))}
                       </select>
                     </div>
                   </div>
