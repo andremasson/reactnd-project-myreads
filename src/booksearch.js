@@ -1,37 +1,43 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
-import BooksGrid from './booksgrid'
+import PropTypes from 'prop-types';
+import BooksGrid from './booksgrid';
+import SearchBar from './SearchBar';
+import * as BooksAPI from './BooksAPI'
 
 class BookSearch extends Component {
   static propTypes = {
-    books: PropTypes.array,
-    onMoveShelf: PropTypes.func.isRequired
+    onMoveShelf: PropTypes.func.isRequired,
+    onNavigationReturn: PropTypes.func.isRequired
   };
 
+  state = {
+    searchResult: []
+  }
+
+  updateResults = (query) => {
+    let result = []
+    BooksAPI.search(query.trim()).then((books, res) => {
+      (books && !books.error && (result = books));
+      this.setState({ searchResult: result })
+    })
+  }
+
+  clearResults = () => {
+    this.setState({ searchResult: '' })
+  }
+
   render() {
-    const { books, onMoveShelf } = this.props;
-    
     return (
       <div className="search-books">
-        <div className="search-books-bar">
-          <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
-          <div className="search-books-input-wrapper">
-            {/*
-              NOTES: The search from BooksAPI is limited to a particular set of search terms.
-              You can find these search terms here:
-              https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-              However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-              you don't find a specific author or title. Every search is limited by search terms.
-            */}
-            <input type="text" placeholder="Search by title or author"/>
-
-          </div>
-        </div>
+        <SearchBar 
+          onUpdateQuery={this.updateResults}
+          onClearQuery={this.clearResults}
+          onNavigationReturn={this.props.onNavigationReturn}
+        />
         <div className="search-books-results">
           <BooksGrid
-            books={books}
-            onMoveShelf={onMoveShelf}
+            books={this.state.searchResult}
+            onMoveShelf={this.props.onMoveShelf}
           />
         </div>
       </div>

@@ -10,7 +10,6 @@ class BooksGrid extends Component {
 
   render() {
     const { books, onMoveShelf } = this.props;
-    
     return (
       <ol className='books-grid'>
         {books && books.map((book) => (
@@ -25,7 +24,7 @@ class BooksGrid extends Component {
               </div>
               <div className='book-title'>{book.title}</div>
               <div className='book-authors'>
-                {book.authors.map((author, index) => (
+                {book.authors && book.authors.map((author, index) => (
                   <span key={index}>{author}<br/></span>
                 ))}
               </div>
