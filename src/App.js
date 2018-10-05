@@ -1,45 +1,38 @@
-import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
-import * as BooksAPI from './BooksAPI'
-import BooksShelf from './bookshelf'
-import BookSearch from './booksearch'
-import './App.css'
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
+import * as BooksAPI from './BooksAPI';
+import BooksShelf from './BookShelf';
+import BookSearch from './BookSearch';
+import './App.css';
 
 class BooksApp extends Component {
   state = {
     books: []
-  }
+  };
 
   shelves = () => (
     [
-      { id: 'currentlyReading', title: 'Currently Reading', mainPage: true },
-      { id: 'wantToRead', title: 'Want to Read', mainPage: true },
-      { id: 'read', title: 'Read', mainPage: true },
-      { id: 'none', title: '', mainPage: false }
+      {id: 'currentlyReading', title: 'Currently Reading'},
+      {id: 'wantToRead', title: 'Want to Read'},
+      {id: 'read', title: 'Read'}
     ]
-  )
+  );
 
-  componentDidMount() {
+  updateBookShelf() {
     BooksAPI.getAll().then((books) => {
       let sortedBooks = [];
-      this.shelves().map((shelf) => (
-        sortedBooks[shelf.id] = books.filter((book) => book.shelf === shelf.id)
-      ));
+      this.shelves().map((shelf) => sortedBooks[shelf.id] = books.filter((book) => book.shelf === shelf.id));
       this.setState({ books: sortedBooks });
     });
   }
 
-  moveToShelf = (bookToMove, event) => {
-    let selectedShelf = event.target.value;
-    let sortedBooks = this.state.books;
+  componentDidMount() {
+    this.updateBookShelf();
+  }
 
-    (bookToMove.shelf && (sortedBooks[bookToMove.shelf] = sortedBooks[bookToMove.shelf].filter((book) => book.id !== bookToMove.id)));
-    (selectedShelf !== 'none' && (sortedBooks[selectedShelf] = sortedBooks[selectedShelf].concat(bookToMove)));
-    bookToMove.shelf = selectedShelf;
-    this.setState((state) => ({
-      books: sortedBooks
-    }));
-    BooksAPI.update(bookToMove, selectedShelf);
+  moveToShelf(bookToMove, event) {
+    let selectedShelf = event.target.value;
+    BooksAPI.update(bookToMove, selectedShelf).then(() => this.updateBookShelf());
   }
 
   render() {
@@ -55,7 +48,7 @@ class BooksApp extends Component {
         <Route path="/search" render={({ history }) => (
           <BookSearch
             onMoveShelf={this.moveToShelf}
-            onNavigationReturn={() => history.push('/') }
+            onNavigationReturn={() => history.push('/')}
           />
         )}/>
       </div>
@@ -63,4 +56,4 @@ class BooksApp extends Component {
   }
 }
 
-export default BooksApp
+export default BooksApp;

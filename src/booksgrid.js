@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import BookActions from './bookactions';
+import BookActions from './BookActions';
 
 class BooksGrid extends Component {
   static propTypes = {
@@ -16,7 +16,7 @@ class BooksGrid extends Component {
             <li key={book.id}>
               <div className='book'>
                 <div className='book-top'>
-                  <div className='book-cover' style={{ width: 128, height: 192, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})` }} />
+                  <div className='book-cover' style={{width: 128, height: 192, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})`}} />
                   <BookActions
                     book={book}
                     onMoveShelf={onMoveShelf}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import BooksGrid from './booksgrid'
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import BooksGrid from './BooksGrid';
 
 class BooksShelf extends Component {
   static propTypes = {
@@ -20,7 +20,7 @@ class BooksShelf extends Component {
         </div>
         <div className="list-books-content">
           <div>
-            {shelves().filter((shelf) => shelf.mainPage === true).map((shelf) => (
+            {shelves().map((shelf) => (
               <div key={shelf.id} className='bookshelf'>
                 <h2 className='bookshelf-title'>{shelf.title}</h2>
                 <div className='bookshelf-books'>

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import BooksGrid from './booksgrid';
+import BooksGrid from './BooksGrid';
 import SearchBar from './SearchBar';
-import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI';
 
 class BookSearch extends Component {
   static propTypes = {
@@ -12,18 +12,18 @@ class BookSearch extends Component {
 
   state = {
     searchResult: []
-  }
+  };
 
   updateResults = (query) => {
-    let result = []
+    let result = [];
     BooksAPI.search(query.trim()).then((books) => {
       (books && !books.error && (result = books));
-      this.setState({ searchResult: result })
-    })
+      this.setState({searchResult: result});
+    });
   }
 
   clearResults = () => {
-    this.setState({ searchResult: '' })
+    this.setState({searchResult: ''});
   }
 
   render() {

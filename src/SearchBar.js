@@ -14,6 +14,7 @@ class SearchBar extends Component {
         <a className="close-search" onClick={this.props.onNavigationReturn}>Close</a>
         <div className="search-books-input-wrapper">
           <input
+            autoFocus
             type="text"
             placeholder="Search by title or author"
             onChange={(event) => this.props.onUpdateQuery(event.target.value)}
