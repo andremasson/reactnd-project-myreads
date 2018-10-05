@@ -1,11 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
+import * as BooksAPI from './BooksAPI'
 
 class BookActions extends Component {
   static propTypes = {
     book: PropTypes.object.isRequired,
     onMoveShelf: PropTypes.func.isRequired
   };
+
+  state = {
+    shelf: ''
+  }
+
+  componentDidMount() {
+    (!this.props.book.shelf && BooksAPI.get(this.props.book.id).then((fetchedBook) => {
+      (this.mounted && this.setState({ shelf: fetchedBook.shelf }));
+    }));
+  }
 
   render() {
     const { book, onMoveShelf } = this.props;
@@ -19,9 +30,12 @@ class BookActions extends Component {
 
     return (
       <div className='book-shelf-changer'>
-        <select value={book.shelf} onChange={(e) => onMoveShelf(book, e)}>
+        <select value={this.state.shelf || book.shelf || ('none')} onChange={(e) => {
+            onMoveShelf(book, e);
+            this.setState({ shelf: e.target.value });
+          }}>
           {actions.map((action) => (
-            <option 
+            <option
               key={action.value}
               value={action.value}
               disabled={!action.enabled}

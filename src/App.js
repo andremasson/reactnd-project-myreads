@@ -7,12 +7,6 @@ import './App.css'
 
 class BooksApp extends Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
     books: []
   }
 
@@ -39,8 +33,8 @@ class BooksApp extends Component {
     let selectedShelf = event.target.value;
     let sortedBooks = this.state.books;
 
-    sortedBooks[bookToMove.shelf] = sortedBooks[bookToMove.shelf].filter((book) => book.id !== bookToMove.id);
-    sortedBooks[selectedShelf] = sortedBooks[selectedShelf].concat(bookToMove);
+    (bookToMove.shelf && (sortedBooks[bookToMove.shelf] = sortedBooks[bookToMove.shelf].filter((book) => book.id !== bookToMove.id)));
+    (selectedShelf !== 'none' && (sortedBooks[selectedShelf] = sortedBooks[selectedShelf].concat(bookToMove)));
     bookToMove.shelf = selectedShelf;
     this.setState((state) => ({
       books: sortedBooks
