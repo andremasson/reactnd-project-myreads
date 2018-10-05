@@ -4,6 +4,12 @@ import BooksGrid from './BooksGrid';
 import SearchBar from './SearchBar';
 import * as BooksAPI from './BooksAPI';
 
+/**
+ * @class
+ * @classdesc Tela de busca de livros
+ * @prop {func} onMoveShelf         - Ação executada ao mover de prateleira
+ * @prop {func} onNavigationReturn  - Ação executada ao clicar botão de voltar
+ */
 class BookSearch extends Component {
   static propTypes = {
     onMoveShelf: PropTypes.func.isRequired,
@@ -14,16 +20,21 @@ class BookSearch extends Component {
     searchResult: []
   };
 
+  /**
+   * @description Atualiza o resultado da busca de acordo com o critério passado por parâmetro
+   * @param {string} query - Critério de busca
+   */
   updateResults = (query) => {
     let result = [];
     BooksAPI.search(query.trim()).then((books) => {
+
+      /**
+       * Atualiza o conteudo de searchResult.
+       * Se o retorno da promise for nulo ou erro, searchResult será um array vazio.
+       */
       (books && !books.error && (result = books));
       this.setState({searchResult: result});
     });
-  }
-
-  clearResults = () => {
-    this.setState({searchResult: ''});
   }
 
   render() {
@@ -31,7 +42,6 @@ class BookSearch extends Component {
       <div className="search-books">
         <SearchBar 
           onUpdateQuery={this.updateResults}
-          onClearQuery={this.clearResults}
           onNavigationReturn={this.props.onNavigationReturn}
         />
         <div className="search-books-results">

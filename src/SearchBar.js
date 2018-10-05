@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * @class
+ * @classdesc Componente de barra de busca
+ * @prop {func} onNavigationReturn  - Ação executada ao clicar botão de voltar
+ * @prop {func} onUpdateQuery       - Ação executada ao mudar query de busca
+ */
 class SearchBar extends Component {
   static propTypes = {
     onNavigationReturn: PropTypes.func.isRequired,
-    onUpdateQuery: PropTypes.func.isRequired,
-    onClearQuery: PropTypes.func.isRequired
+    onUpdateQuery: PropTypes.func.isRequired
   };
 
   render() {

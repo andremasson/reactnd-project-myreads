@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import BookActions from './BookActions';
 
+/**
+ * @class
+ * @classdesc Componente que exibe os livros
+ * @prop {array} [books]      - Lista com os livros de uma prateleira ou resultado da busca
+ * @prop {func} onMoveShelf   - Ação executada ao mover de prateleira
+ */
 class BooksGrid extends Component {
   static propTypes = {
     books: PropTypes.array,
@@ -16,7 +22,7 @@ class BooksGrid extends Component {
             <li key={book.id}>
               <div className='book'>
                 <div className='book-top'>
-                  <div className='book-cover' style={{width: 128, height: 192, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})`}} />
+                  <div className='book-cover' style={{width: 128, height: 192, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})`}}/>
                   <BookActions
                     book={book}
                     onMoveShelf={onMoveShelf}

@@ -3,15 +3,31 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import BooksGrid from './BooksGrid';
 
+/**
+ * @class
+ * @classdesc Componente que exibe todas as listas de leitura
+ * @prop {array} books      - Lista de todos os livros
+ * @prop {func} onMoveShelf - Ação executada ao mover de prateleira
+ * @prop {array} shelves    - Lista com todas as prateleiras a serem exibidas
+ */
 class BooksShelf extends Component {
   static propTypes = {
     books: PropTypes.array.isRequired,
     onMoveShelf: PropTypes.func.isRequired,
-    shelves: PropTypes.func.isRequired
+    shelves: PropTypes.array.isRequired
   };
 
+  /**
+   * @description Retorna os livros de uma prateleira
+   * @param {string} shelf - Prateleira
+   * @returns {array} Livros da prateleira selecionada
+   */
+  getBooksForShelf = (shelf) => {
+    return this.props.books.filter((book) => book.shelf === shelf);
+  }
+
   render() {
-    const { books, onMoveShelf, shelves } = this.props;
+    const { onMoveShelf, shelves } = this.props;
 
     return (
       <div className="list-books">
@@ -20,12 +36,12 @@ class BooksShelf extends Component {
         </div>
         <div className="list-books-content">
           <div>
-            {shelves().map((shelf) => (
+            {shelves.map((shelf) => (
               <div key={shelf.id} className='bookshelf'>
                 <h2 className='bookshelf-title'>{shelf.title}</h2>
                 <div className='bookshelf-books'>
                   <BooksGrid
-                    books={books[shelf.id]}
+                    books={this.getBooksForShelf(shelf.id)}
                     onMoveShelf={onMoveShelf}
                   />
                 </div>
