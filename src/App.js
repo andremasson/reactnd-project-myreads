@@ -28,10 +28,9 @@ class BooksApp extends Component {
   /**
    * @description Busca livros pela API
    */
-  updateBookShelf = () => {
-    BooksAPI.getAll().then((books) => {
-      this.setState({ books: books });
-    });
+  updateBookShelf = async () => {
+    const books = await BooksAPI.getAll()
+    this.setState({ books })
   }
     
   componentDidMount = () => {
@@ -67,6 +66,7 @@ class BooksApp extends Component {
           <BookSearch
             onMoveShelf={this.moveToShelf}
             onNavigationReturn={() => history.push('/')}
+            booksOnShelf={this.state.books}
           />
         )}/>
       </div>

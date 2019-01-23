@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { Debounce } from 'react-throttle';
 
 /**
  * @class
@@ -7,7 +8,7 @@ import PropTypes from 'prop-types';
  * @prop {func} onNavigationReturn  - Ação executada ao clicar botão de voltar
  * @prop {func} onUpdateQuery       - Ação executada ao mudar query de busca
  */
-class SearchBar extends Component {
+class SearchBar extends PureComponent {
   static propTypes = {
     onNavigationReturn: PropTypes.func.isRequired,
     onUpdateQuery: PropTypes.func.isRequired
@@ -18,12 +19,14 @@ class SearchBar extends Component {
       <div className="search-books-bar">
         <a className="close-search" onClick={this.props.onNavigationReturn}>Close</a>
         <div className="search-books-input-wrapper">
-          <input
-            autoFocus
-            type="text"
-            placeholder="Search by title or author"
-            onChange={(event) => this.props.onUpdateQuery(event.target.value)}
-          />
+          <Debounce time="400" handler="onChange">
+            <input
+              autoFocus
+              type="text"
+              placeholder="Search by title or author"
+              onChange={(event) => this.props.onUpdateQuery(event.target.value)}
+            />
+          </Debounce>
         </div>
       </div>
     );

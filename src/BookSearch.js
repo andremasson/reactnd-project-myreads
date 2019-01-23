@@ -13,7 +13,8 @@ import * as BooksAPI from './BooksAPI';
 class BookSearch extends Component {
   static propTypes = {
     onMoveShelf: PropTypes.func.isRequired,
-    onNavigationReturn: PropTypes.func.isRequired
+    onNavigationReturn: PropTypes.func.isRequired,
+    booksOnShelf: PropTypes.array.isRequired
   };
 
   state = {
@@ -24,17 +25,15 @@ class BookSearch extends Component {
    * @description Atualiza o resultado da busca de acordo com o critério passado por parâmetro
    * @param {string} query - Critério de busca
    */
-  updateResults = (query) => {
+  updateResults = async (query) => {
     let result = [];
-    BooksAPI.search(query.trim()).then((books) => {
-
-      /**
-       * Atualiza o conteudo de searchResult.
-       * Se o retorno da promise for nulo ou erro, searchResult será um array vazio.
-       */
-      (books && !books.error && (result = books));
-      this.setState({searchResult: result});
+    const books = await BooksAPI.search(query.trim());
+    (books && !books.error && (result = books));
+    result.map((book) => {
+      const bookFound = this.props.booksOnShelf.find(item => item.id === book.id);
+      return (bookFound && (book.shelf = bookFound.shelf));
     });
+    this.setState({searchResult: result});
   }
 
   render() {

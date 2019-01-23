@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import * as BooksAPI from './BooksAPI';
 
 /**
  * @class
@@ -14,33 +13,8 @@ class BookActions extends Component {
     onMoveShelf: PropTypes.func.isRequired
   };
 
-  state = {
-    shelf: ''
-  };
-
-  /**
-   * @description Metodo chamado para trocar o livro de prateleira. Atualiza o estado neste componente e o livro no componente pai.
-   * @param {object} bookToMove   - Livro a ser alterado
-   * @param {string} targetShelf  - Prateleira para onde mudar o livro
-   */
-  moveShelf = (book, targetShelf) => {
-    this.props.onMoveShelf(book, targetShelf);
-    this.setState({shelf: targetShelf});
-  }
-  
-  componentDidMount = () => {
-
-    /**
-     * Usa a API para buscar informação da prateleira (shelf).
-     * Informação não vem pelo metodo search da API.
-     */
-    (!this.props.book.shelf && BooksAPI.get(this.props.book.id).then((fetchedBook) => {
-      this.setState({shelf: fetchedBook.shelf});
-    }));
-  }
-
   render() {
-    const { book } = this.props;
+    const { book, onMoveShelf } = this.props;
 
     /**
      * @description Ações disponíveis para seleção.
@@ -60,10 +34,10 @@ class BookActions extends Component {
      * Componente será visivel somente quando tiver a informação da prateleira.
      */
     return (
-      <div className='book-shelf-changer' style={{visibility: (!this.state.shelf && !book.shelf) ? 'hidden' : ''}} >
+      <div className='book-shelf-changer'>
         <select
-          value={this.state.shelf || book.shelf || ('none')}
-          onChange={(e) => this.moveShelf(book, e.target.value)}
+          value={book.shelf || 'none'}
+          onChange={(e) => onMoveShelf(book, e.target.value)}
           >
             {actions.map((action) => (
               <option
